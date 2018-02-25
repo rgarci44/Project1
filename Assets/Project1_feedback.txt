@@ -1,0 +1,27 @@
+Base feature score: 89/100
+Innovation bonus: 5
+Bug penalty: 6
+Overall grade: 88/100
+
+Features successfully implemented:
+- First person control
+- Projectiles fire when left mouse is clicked
+- Targets destroyed when hit
+- Level walls
+- Ramp walking and falling
+- Level completion
+- Final pickup item appears and works correctly
+
+Innovations:
+- Ranking system based on contact 
+
+Issues:
+After the final object is picked up, the completion spawn script is 
+still running, causing a per-frame error barrage of exceptions.
+
+Looking at your BulletCollision.cs code, I identified an important issue: You're
+destroying targets by looking for them in the Hierarchy using GameObject.Find.
+That means the first one that returns will be used; if you hit the left target
+first, the right one is destroyed instead. If more targets are added to the 
+scene, the problem will make the game unplayable. To fix it, in OnCollisionEnter,
+use Destroy(collision.gameObject).
